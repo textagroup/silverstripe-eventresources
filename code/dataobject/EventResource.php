@@ -6,18 +6,18 @@
  */
 class EventResource extends DataObject {
 
-	public static $db = array(
+	private static $db = array(
 		'Title'       => 'Varchar(255)',
 		'Description' => 'Text',
 		'Type'        => 'Enum("Single, Limited, Unlimited")',
 		'Quantity'    => 'Int'
 	);
 
-	public static $belongs_many_many = array(
+	private static $belongs_many_many = array(
 		'Events' => 'CalendarDateTime'
 	);
 
-	public static $summary_fields = array(
+	private static $summary_fields = array(
 		'Title',
 		'Description',
 		'Type'

@@ -4,17 +4,17 @@
  *
  * @package silverstripe-eventresources
  */
-class CalendarDateTimeResourcesExtension extends DataObjectDecorator {
+class CalendarDateTimeResourcesExtension extends DataExtension {
 
-	public function extraStatics() {
-		return array(
-			'many_many' => array(
-				'Resources' => 'EventResource'),
-			'many_many_extraFields' => array(
-				'Resources' => array(
-					'BookingQuantity' => 'Int'))
-		);
-	}
+	private static $many_many = array(
+		'Resources' => 'EventResource'
+	);
+
+	private static $many_many_extraFields = array(
+		'Resources' => array(
+			'BookingQuantity' => 'Int'
+		)
+	);
 
 	public function updateDateTimeCMSFields(FieldSet $fields) {
 		if (!$this->owner->isInDB()) {
