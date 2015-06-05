@@ -3,15 +3,11 @@
 	"description": "SilverStripe event resources module",
 	"type": "silverstripe-module",
 	"keywords": ["silverstripe", "event"],
-	"license": "BSD-3-Clause",
+	"license": "SilverStripe Event Resources Module",
 	"authors": [
 		{
 			"name": "Andrew Short",
 			"email": "andrewjshort@gmail.com"
-		},
-		{
-			"name": "Marcus Nyeholt",
-			"email": "marcus@silverstripe.com.au"
 		}
 	],
 	"require": {
