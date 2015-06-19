@@ -13,8 +13,14 @@
 	"require": {
 		"silverstripe/cms": ">=3.1",
 		"silverstripe/framework": ">=3.1",
-		"silverstripe-australia/eventmanagement": "~1.2"
+		"silverstripe-australia/eventmanagement": "1.2.x-dev"
 	},
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/souldigital/silverstripe-eventmanagement.git"
+		}
+	],
 	"extra": {
 		"installer-name": "eventresources",
 		"branch-alias": {
