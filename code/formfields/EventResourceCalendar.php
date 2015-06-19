@@ -110,6 +110,6 @@ class EventResourceCalendar extends FormField {
 	/**
 	 * @ignore
 	 */
-	public function saveInto() { /* nothing */ }
+	public function saveInto(DataObjectInterface $record) { /* nothing */ }
 
 }
