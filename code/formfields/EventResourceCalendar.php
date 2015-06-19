@@ -17,7 +17,7 @@ class EventResourceCalendar extends FormField {
 		parent::__construct($name);
 	}
 
-	public function FieldHolder() {
+	public function FieldHolder($properties = array()) {
 		Requirements::css(Director::protocol() . 'ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/themes/base/jquery-ui.css');
 		Requirements::css('eventresources/thirdparty/jquery-fullcalendar/fullcalendar.css');
 		Requirements::javascript('eventresources/thirdparty/jquery-fullcalendar/fullcalendar.min.js');
