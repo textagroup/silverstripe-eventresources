@@ -1,7 +1,8 @@
 ;(function($) {
-	Behaviour.register({
-		".event-resource-calendar": {
-			initialize: function() {
+	$.entwine('ss', function($){
+
+		$(".event-resource-calendar").entwine({
+			onmatch: function() {
 				$(this).fullCalendar({
 					header: {
 						left: 'prev,next today',
@@ -16,6 +17,7 @@
 					}
 				});
 			}
-		}
+		});
+
 	});
 })(jQuery);

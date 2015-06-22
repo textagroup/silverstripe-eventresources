@@ -1,18 +1,43 @@
 ;(function($) {
-	function toggleQuantity() {
-		$("#Quantity").toggle($(this).val() == "Limited");
-	}
 
-	$("#Form_AddForm_Type").live("change", toggleQuantity);
-	$("#Form_EditForm_Type").live("change", toggleQuantity);
-
-	Behaviour.register({
-		"#Form_AddForm_Type":  { initialize: toggleQuantity },
-		"#Form_EditForm_Type": { initialize: toggleQuantity }
+	$.entwine('ss', function($){
+		$("#Form_ItemAddForm_Type").entwine({
+			onmatch: function() {
+				$(this).bind('change', function() {
+					if ( $(this).val() == "Limited" ) {
+						$("#Quantity").show();
+					} else {
+						$("#Quantity").hide();
+					}
+				}).trigger('change');
+				this._super();
+			}
+		});
+		$("#Form_ItemEditForm_Type").entwine({
+			onmatch: function() {
+				$(this).bind('change', function() {
+					if ( $(this).val() == "Limited" ) {
+						$("#Quantity").show();
+					} else {
+						$("#Quantity").hide();
+					}
+				}).trigger('change');
+				this._super();
+			}
+		});
+		$('li[aria-controls="Root_Bookings"] a').entwine({
+			onclick: function() {
+				$('#Root_Bookings .event-resource-calendar')
+				.fullCalendar("render");
+				$('#Root_Bookings .event-resource-calendar')
+				.fullCalendar(
+					"option", 
+					"height", 
+					$("#Root_Bookings").height()
+				);
+				this._super();
+			}
+		});
 	});
 
-	$("#tab-Root_Bookings").live("click", function() {
-		$("#Form_EditForm_Bookings").fullCalendar("render");
-		$("#Form_EditForm_Bookings").fullCalendar("option", "height", $("#Root_Bookings").height());
-	});
 })(jQuery);
