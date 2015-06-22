@@ -6,8 +6,8 @@
  */
 class EventResourceCalendar extends FormField {
 
-	public static $url_handlers = array(
-		'bookings' => 'bookings'
+	private static $allowed_actions = array(
+		'bookings'
 	);
 
 	protected $parent;
@@ -22,7 +22,6 @@ class EventResourceCalendar extends FormField {
 		Requirements::css('eventresources/thirdparty/jquery-fullcalendar/fullcalendar.css');
 		Requirements::javascript('eventresources/thirdparty/jquery-fullcalendar/fullcalendar.min.js');
 		Requirements::javascript('eventresources/javascript/EventResourceCalendar.js');
-
 		return $this->createTag('div', array(
 			'id'    => $this->id(),
 			'class' => 'event-resource-calendar ' . $this->extraClass(),
@@ -31,34 +30,39 @@ class EventResourceCalendar extends FormField {
 	}
 
 	public function bookings($request) {
+
 		$start  = (int) $request->getVar('start');
 		$end    = (int) $request->getVar('end');
 		$result = array();
 
 		// First load standard non-recurring events that fall between the start
 		// and end date.
-		$events = $this->parent->Events(
-			sprintf(
-				'"CalendarEvent"."Recursion" = 0 AND (
-					"StartDate" BETWEEN \'%1$s\' AND \'%2$s\'
-					OR "EndDate" BETWEEN \'%1$s\' AND \'%2$s\'
-					OR ("StartDate" < \'%1$s\' AND "EndDate" > \'%2$s\')
-				)',
-				date('Y-m-d', $start), date('Y-m-d', $end)),
-			null,
-			'INNER JOIN "CalendarEvent" ON "CalendarEvent"."ID" = "CalendarDateTime"."EventID"');
+		// $this->parent = EventResource
+		// $this->parent->Events() = belongs_many_many:CalendarDateTime
+		// 
+		$events = $this->parent->Events()
+		->innerJoin('CalendarEvent', '"CalendarEvent"."ID" = "CalendarDateTime"."EventID"')
+		->where(sprintf(
+			'"CalendarEvent"."Recursion" = 0 AND (
+				"StartDate" BETWEEN \'%1$s\' AND \'%2$s\'
+				OR "EndDate" BETWEEN \'%1$s\' AND \'%2$s\'
+				OR ("StartDate" < \'%1$s\' AND "EndDate" > \'%2$s\')
+			)',
+			date('Y-m-d', $start),
+			date('Y-m-d', $end)
+		));
 
 		// Then load every recurring event and see if they fall between the start
 		// and end.
-		$recurring = $this->parent->Events(
-			sprintf(
-				'"CalendarEvent"."Recursion" = 1
-				AND ("EndDate" IS NULL OR "EndDate" > \'%s\')
-				AND ("StartDate" IS NULL OR "StartDate" < \'%s\')',
-				date('Y-m-d', $start), date('Y-m-d', $end)
-			),
-			null,
-			'INNER JOIN "CalendarEvent" ON "CalendarEvent"."ID" = "CalendarDateTime"."EventID"');
+		$recurring = $this->parent->Events()
+		->innerJoin('CalendarEvent', '"CalendarEvent"."ID" = "CalendarDateTime"."EventID"')
+		->where(sprintf(
+			'"CalendarEvent"."Recursion" = 1
+			AND ("EndDate" IS NULL OR "EndDate" > \'%s\')
+			AND ("StartDate" IS NULL OR "StartDate" < \'%s\')',
+			date('Y-m-d', $start), 
+			date('Y-m-d', $end)
+		));
 
 		// Now loop through each day in the specified date range, and check
 		// each recurring date to see if it occurs on that day. Note that
